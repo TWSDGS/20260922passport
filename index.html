@@ -391,7 +391,7 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
   <!-- 手動輸入 -->
   <section class="sec">
     <div class="sh" style="--c:var(--violet)"><h2>掃不到 QR？</h2></div>
-    <div class="shs">向該站志工索取四碼「蓋章碼」，輸入後即可蓋章（大小寫、全形都可以）。也可以點任一站點卡改用「上傳合照」認定。</div>
+    <div class="shs">向該站工作人員索取四碼「蓋章碼」，輸入後即可蓋章（大小寫、全形都可以）。也可以點任一站點卡改用「上傳合照」認定。</div>
     <div style="display:flex;gap:9px">
       <input type="text" id="manual" class="code" placeholder="蓋章碼（四碼）" maxlength="6" style="flex:1">
       <button class="btn g" id="btnManual" style="width:100px;padding:12px 0">蓋章</button>
@@ -470,8 +470,8 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
     </div>
 
     <div class="note" style="max-width:none">
-      <b>沒有手機或不方便掃碼？</b>請至現場 <b>A9 報到／簽退區</b>領取紙本護照，由各站志工人工蓋章，
-      集滿後至服務台換抽獎券，權益完全相同。
+      <b>沒有手機或不方便掃碼？</b>請至現場 <b>A9 報到／簽退區</b>領取紙本護照，由各站工作人員人工蓋章，
+      中場休息結束前繳回 A9 報到台，由工作人員登錄後參加抽獎，權益完全相同。
     </div>
   </div>
 </div>
@@ -490,8 +490,8 @@ var CFG = {
   map         : 'https://www.oshasdg.com/expo2026#map',             // 展區地圖錨點
   signup      : 'https://www.oshasdg.com/event-details/zhi-chang-yong-xu-jian-kang-yu-an-quan-fa-zhan-cheng-guo-fa-biao-hui-1',
   wall        : 'https://www.oshasdg.com/wall',                     // ★ 倡議共創牆填寫頁（現場以 ngrok／cloudflared 對外網址置換）
-  expo        : 'https://www.oshasdg.com/expo2026#map',             // ★ 線上互動數位展
-  regForm     : 'https://www.oshasdg.com/lucky-draw',               // ★ 抽獎登記表單
+  expo        : 'https://www.oshasdg.com/expo2026/5y',              // 線上互動數位展
+  regForm     : '',                                                 // ★ 抽獎登記表單網址（未建置前留空＝按鈕改顯示服務台登記畫面）
   feedback    : 'https://www.oshasdg.com/feedback',                 // ★ 會後回饋問卷
   inclusive   : 'https://www.oshasdg.com/inclusiveworkplace',
   awards      : 'https://www.oshasdg.com/114-awards',
@@ -519,7 +519,7 @@ var STATIONS = [
   /* --- 現場展區 bit 2-10 --- */
   {id:'A1',bit:2,grp:'A',ic:'🧱',c:'#004CB9',name:'倡議共創牆',full:'14:15 倡議時段',
    loc:'國際會議廳｜舞台大螢幕',
-   desc:'掃描留下倡議即完成本站集章，並歡迎合影打卡。你的企業會即時亮相在大螢幕的台灣版圖上；14:15–14:30 倡議儀式是全場一起上牆的時刻。會前已完成線上倡議者，本章自動蓋上。',
+   desc:'掃描留下倡議即完成本站集章，並歡迎合影打卡。你的企業會即時亮相在大螢幕的台灣版圖上；14:15–14:30 承諾儀式是全場一起上牆的時刻。會前已完成線上倡議者，本章自動蓋上。',
    pts:['邀請 30 家領航企業與所有來賓共創未來','已填寫過的企業會更新倡議詞','會後共創牆持續開放，可持續填寫並下載自家倡議卡'],
    wall:1, link:'wall',linkTx:'寫下／更新倡議'},
   {id:'A2',bit:3,grp:'A',ic:'📷',c:'#1B72BC',name:'主視覺合影',full:'主視覺合影區',
@@ -560,7 +560,7 @@ var STATIONS = [
   {id:'A9',bit:10,grp:'A',ic:'🪪',c:'#0B3B7A',name:'報到／簽退',full:'報到／簽退區（不計點）',
    loc:'前廳與會議廳之間｜入口走道',
    desc:'本站不列入集點。報到掃碼開通護照；需要登錄學習時數者，離場前請務必回到這裡簽退——時數以完整簽到退紀錄為準。',
-   pts:['13:00–13:30 報到；請攜帶報到編號','未簽到退、遲到或早退 15 分鐘以上者不予登錄學習時數','請自行截取簽到退完成畫面或拍照留存','無手機或不便掃碼者，可於此處領取紙本護照','使用紙本護照者：請於中場休息結束前在會場入口交回，由工作人員登錄後參加抽獎'],
+   pts:['13:00–13:30 報到；請攜帶報到編號','未簽到退、遲到或早退 15 分鐘以上者不予登錄學習時數','請自行截取簽到退完成畫面或拍照留存','無手機或不便掃碼者，可於此處領取紙本護照','使用紙本護照者：請於中場休息結束前繳回 A9 報到台，由工作人員登錄後參加抽獎'],
    link:'signup',linkTx:'查看報到與時數說明'},
 
   /* --- 會後 bit 11 --- */
@@ -643,7 +643,7 @@ function decodeTicket(code){
 /* =========================================================
    5. 狀態
    ========================================================= */
-function blank(){ return {v:2, on:0, mask:0, t:{}, via:{}, ph:{}, name:'', org:'', no:'', out:0, rs:0}; }
+function blank(){ return {v:2, on:0, mask:0, t:{}, via:{}, ph:{}, name:'', org:'', no:'', out:0, rs:0, tail:''}; }
 function load(){
   var st = blank();
   try{
@@ -660,6 +660,7 @@ function load(){
       st.no   = o.no   || '';
       st.out  = o.out  || 0;
       st.rs   = o.rs   || 0;   /* 曾用備份碼還原：核銷時提醒紀錄不完整 */
+      st.tail = o.tail || '';   /* 手機末 3 碼：只存本機，登記抽獎時帶入 */
     }
   }catch(e){}
   /* 儲存被擋時的最後防線：從網址錨點 #p=HW-XXX-YY 還原 */
@@ -1016,7 +1017,7 @@ function stamp(id, quiet, via){
 
   var rid = resolveCode(raw);
   if(rid === 'LOCKED'){
-    if(!quiet) toast('此站需要向現場志工索取「蓋章碼」，或改用合照認定');
+    if(!quiet) toast('此站需要向現場工作人員索取「蓋章碼」，或改用合照認定');
     return false;
   }
   var s = IDX[rid];
@@ -1051,12 +1052,13 @@ function stamp(id, quiet, via){
 /* =========================================================
    11. 彈窗
    ========================================================= */
-var VIA_TX = {qr:'掃描 QR', code:'志工蓋章碼', photo:'現場合照', wall:'倡議上牆'};
+var VIA_TX = {qr:'掃描 QR', code:'工作人員蓋章碼', photo:'現場合照', wall:'倡議上牆'};
 function openSheet(id){
   var s = IDX[id]; if(!s) return;
   var on = has(s);
   var url = CFG[s.link] || CFG.site;
-  var isA = (s.grp === 'A') && !s.wall;   /* A1 以「留下倡議」認定，不用合照 */
+  /* 可用合照認定的站：A2–A8。A1 以「留下倡議」認定；A9 報到／簽退不計點，只能掃 QR */
+  var isA = (s.grp === 'A') && !s.wall && s.id !== 'A9';
 
   /* 已蓋章：顯示認定方式與時間；合照認定的順帶顯示縮圖 */
   var statTx;
@@ -1293,7 +1295,8 @@ el('meEdit').onclick = function(){
     '<div class="bd">'+
       '<label class="fl">姓名或暱稱<s>*</s></label><input type="text" id="edName" maxlength="20" value="'+esc(ST.name)+'">'+
       '<label class="fl">公司／單位<u>選填</u></label><input type="text" id="edOrg" maxlength="30" value="'+esc(ST.org)+'">'+
-      '<label class="fl">報到編號<u>選填</u></label><input type="text" id="edNo" maxlength="12" value="'+esc(ST.no)+'">'+
+      '<label class="fl">報到編號<u>登記抽獎必填</u></label><input type="text" id="edNo" maxlength="12" value="'+esc(ST.no)+'">'+
+      '<label class="fl">手機末 3 碼<u>選填，登記抽獎時自動帶入</u></label><input type="tel" id="edTail" maxlength="3" inputmode="numeric" value="'+esc(ST.tail || '')+'">'+
       '<div class="err" id="edErr"></div>'+
       '<div class="btns"><button class="btn g" id="edGo">儲存</button></div>'+
     '</div>';
@@ -1303,6 +1306,7 @@ el('meEdit').onclick = function(){
     var n = el('edName').value.trim();
     if(!n){ el('edErr').textContent = '請填寫姓名或暱稱。'; return; }
     ST.name = n; ST.org = el('edOrg').value.trim(); ST.no = el('edNo').value.trim().toUpperCase();
+    ST.tail = String(el('edTail').value || '').replace(/\D/g, '').slice(0, 3);
     save(); closeSheet(); render(); toast('已更新');
   };
 };
@@ -1318,14 +1322,23 @@ el('btnManual').onclick = function(){
 el('manual').onkeydown = function(e){ if(e.key === 'Enter') el('btnManual').click(); };
 
 el('btnReg').onclick = function(){
-  if(tier().k < 1){ toast('集滿 3 點才能登記抽獎'); return; }
+  /* 早鳥輪只看會前兩項線上任務，與現場點數無關 */
+  if(tier().k < 1 && count('P') < 2){ toast('集滿 3 點才能登記抽獎'); return; }
+  if(!CFG.regForm){ showRegDesk(); return; }
+  /* 報到編號是抽獎的身分鍵：沒填就先請來賓補上，登記頁才能整組帶入 */
+  if(!String(ST.no || '').trim()){
+    toast('請先補上報到編號，登記抽獎時會自動帶入');
+    el('meEdit').click();
+    return;
+  }
   var q = [
     'code=' + encodeURIComponent(encodeTicket(ST.mask)),
     'tk='   + tickets(),
     'n='    + count('A'),
     'name=' + encodeURIComponent(ST.name || ''),
     'org='  + encodeURIComponent(ST.org  || ''),
-    'no='   + encodeURIComponent(ST.no   || '')
+    'no='   + encodeURIComponent(ST.no   || ''),
+    'tail=' + encodeURIComponent(ST.tail || '')
   ].join('&');
   openUrl(CFG.regForm + (CFG.regForm.indexOf('?') < 0 ? '?' : '&') + q);
 };
@@ -1347,6 +1360,35 @@ el('btnRestore').onclick = function(){
     toast('已還原 ' + count('A') + ' 枚現場章');
   };
 };
+
+/* 抽獎登記（未設定線上表單時）：顯示登記所需資料，請來賓到服務台登記。
+   服務台以 staff_admin.html 輸入「報到編號＋備份碼」即完成登記。 */
+function showRegDesk(){
+  var t = tier(), pre = (count('P') === 2), code = encodeTicket(ST.mask);
+  el('sheet').innerHTML =
+    '<div class="hd"><div class="ic">🎟️</div><div><h3>登記抽獎</h3></div><button class="x" id="sx">✕</button></div>'+
+    '<div class="bd">'+
+      '<p>請在<b>中場休息結束前</b>，到<b>服務台</b>出示這個畫面完成登記。<br>'+
+      '集點統計到中場休息結束，<b>登記前請先把想集的章集完</b>——服務台登記的是你出示當下的點數。</p>'+
+      '<div class="note" style="margin:12px 0;line-height:1.9">'+
+        '<b>姓名</b>：'+esc(ST.name || '（未填）')+'<br>'+
+        '<b>報到編號</b>：'+(ST.no ? esc(ST.no) : '<span style="color:#B5762E">（未填——請按上方「編輯」補上）</span>')+'<br>'+
+        '<b>備份碼</b>：<span style="font-family:monospace;font-size:17px;letter-spacing:.06em">'+code+'</span><br>'+
+        '<b>目前</b>：'+pts()+' 點 ‧ '+t.name+' ‧ 抽獎 '+(t.tk + (pre ? 1 : 0))+' 次'+
+      '</div>'+
+      '<div class="btns">'+
+        '<button class="btn g" id="rgCopy">複製備份碼</button>'+
+        '<button class="btn o" id="rgVerify">🧾 開啟領獎核銷畫面</button>'+
+      '</div>'+
+    '</div>';
+  el('modal').classList.add('on');
+  el('sx').onclick = closeSheet;
+  el('rgCopy').onclick = function(){
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(code); }catch(e){}
+    toast('已複製 ' + code);
+  };
+  el('rgVerify').onclick = function(){ closeSheet(); setTimeout(function(){ el('btnVerify').click(); }, 250); };
+}
 
 /* 領獎核銷畫面：把每一站的「認定方式＋時間＋合照」攤在同一頁，
    讓服務台一眼看完，不必逐格點開。全部是本機資料，不會上傳。 */
