@@ -742,6 +742,7 @@ function withGuest(s, u){
   var q = [];
   if(ST.org)  q.push('org=' + encodeURIComponent(ST.org));
   if(ST.name) q.push('who=' + encodeURIComponent(ST.name));
+  if(ST.no)   q.push('no='  + encodeURIComponent(ST.no));   /* 一人一筆倡議：帶報到編號過去當主鍵 */
   if(!q.length) return u;
   q.push('src=passport');
   return u + (u.indexOf('?') < 0 ? '?' : '&') + q.join('&');
@@ -984,6 +985,19 @@ var CODES = {
   XP35:'A5', GD82:'A6', NC67:'A7', VJ94:'A8'
 };
 var STAFF = /[?&]staff=1/.test(location.search);   /* 提前偵測：網址蓋章也吃得到 */
+
+/* 網址帶來的來賓資料，只用於「開通畫面」預填；必須在 cleanUrl() 清掉網址之前先取下來。
+   來源：倡議共創牆送出後的回護照連結（?s=P2&no=B034&org=…&who=…）、報到通知信連結。 */
+var PREFILL = (function(){
+  try{
+    var p = new URLSearchParams(String(location.search || '').replace(/^\?/, ''));
+    return {
+      no  : (p.get('no')  || '').trim().toUpperCase().slice(0, 12),
+      org : (p.get('org') || '').trim().slice(0, 40),
+      name: (p.get('who') || p.get('name') || '').trim().slice(0, 20)
+    };
+  }catch(e){ return { no:'', org:'', name:'' }; }
+})();
 
 /* 輸入正規化：全形轉半形、去空白連字號、轉大寫 */
 function normCode(v){
@@ -1231,7 +1245,14 @@ function showOnboard(){
   }else{
     p.className = 'pend';
   }
-  try{ el('obName').focus({preventScroll:true}); }catch(e){}
+  /* 從網址帶入的資料預填（使用者已經自己打過的就不覆蓋） */
+  if(PREFILL.name && !el('obName').value) el('obName').value = PREFILL.name;
+  if(PREFILL.org  && !el('obOrg').value)  el('obOrg').value  = PREFILL.org;
+  if(PREFILL.no   && !el('obNo').value)   el('obNo').value   = PREFILL.no;
+
+  /* 游標落在第一個還空著的欄位，已帶入的就不要再擋著 */
+  var first = !el('obName').value ? 'obName' : (!el('obNo').value ? 'obNo' : 'obName');
+  try{ el(first).focus({preventScroll:true}); }catch(e){}
   reportHeight();
 }
 function hideOnboard(){
