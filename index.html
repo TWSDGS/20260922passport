@@ -491,7 +491,7 @@ var CFG = {
   signup      : 'https://www.oshasdg.com/event-details/zhi-chang-yong-xu-jian-kang-yu-an-quan-fa-zhan-cheng-guo-fa-biao-hui-1',
   wall        : 'https://www.oshasdg.com/wall',                     // ★ 倡議共創牆填寫頁（現場以 ngrok／cloudflared 對外網址置換）
   expo        : 'https://www.oshasdg.com/expo2026/5y',              // 線上互動數位展
-  regForm     : '',                                                 // ★ 抽獎登記表單網址（未建置前留空＝按鈕改顯示服務台登記畫面）
+  regForm     : 'https://www.oshasdg.com/lucky-draw',                // 抽獎登記頁（Wix CMS 版，已驗收 2026-09-15；改回 '' 會顯示服務台登記畫面）
   feedback    : 'https://www.oshasdg.com/feedback',                 // ★ 會後回饋問卷
   inclusive   : 'https://www.oshasdg.com/inclusiveworkplace',
   awards      : 'https://www.oshasdg.com/114-awards',
@@ -523,22 +523,22 @@ var STATIONS = [
    pts:['邀請 30 家領航企業與所有來賓共創未來','已填寫過的企業會更新倡議詞','會後共創牆持續開放，可持續填寫並下載自家倡議卡'],
    wall:1, link:'wall',linkTx:'寫下／更新倡議'},
   {id:'A2',bit:3,grp:'A',ic:'📷',c:'#1B72BC',name:'主視覺合影',full:'主視覺合影區',
-   loc:'前廳｜左側牆面（進場左手邊）',
+   loc:'前廳｜入口處',
    desc:'2026 主視覺「安全工作．幸福職場．共創未來」合影背板。同一套視覺串連本次活動所有頁面、展區與周邊產出。',
    pts:['藍＝安全與制度，綠＝健康與成長','城市代表產業與生活的共存','拍完別忘了 tag #健康勞動力 #安全工作幸福職場'],
    link:'hub',linkTx:'看展區導覽頁'},
   {id:'A3',bit:4,grp:'A',ic:'👾',c:'#FEC829',name:'共融視覺牆',full:'共融視覺牆',
-   loc:'前廳｜左側牆面（A2 下方）',
+   loc:'前廳｜展區廣場',
    desc:'與社會企業「點點善」合作，邀請弱勢創作者共同創作的職場友善代表角色。每一隻小怪物都有自己的名字與故事。',
    pts:['歡迎至平台「共融職場專區」瞭解各個小怪物跟互動','小怪物的文青小物區同步在現場展出（A6 站）'],
    link:'inclusive',linkTx:'進入共融職場專區'},
   {id:'A4',bit:5,grp:'A',ic:'🏛️',c:'#42B852',name:'推動歷程區',full:'推動歷程區',
-   loc:'前廳｜下方長牆（近會議廳入口）',
+   loc:'前廳｜落地窗前',
    desc:'2021–2026 五年大事紀與歷年產出，串接五支主題展架：GRI 403 指南 → 自我評量平台 → 資源盤點與供應鏈應用 → 永續報告書主動評比與遠見合作調查 → 回饋報告與 SAQ Builder。現場備有各家獲獎企業介紹單張。',
    pts:['三屆「健康勞動力永續領航企業」選拔累計 30 家','全國最大 OHS 自評資料庫，累計 3,775 家次','八大管理構面對接國際準則 GRI 403','供應鏈以大帶小：523 → 1,225 → 2,071 家','永續報告書主動評比 2025 年涵蓋 1,938 家'],
    link:'awards',linkTx:'看選拔專區與歷年成果'},
   {id:'A5',bit:6,grp:'A',ic:'💬',c:'#7E5AA8',name:'圓桌交流區',full:'圓桌交流區',
-   loc:'前廳｜下方長桌（A4 右側）',
+   loc:'前廳｜階梯前側廣場',
    desc:'每一桌一個主題，由獲獎領航企業代表擔任桌長，分享導入過程中真正踩過的坑。坐下來聊，比看展板有用。',
    pts:['心理健康職場、供應鏈共治、職場安全、職場共融等主題','桌長為歷屆領航企業代表','有問題直接問，這是最短的取經路徑'],
    link:'awards',linkTx:'看各桌企業的獲獎案例'},
@@ -548,12 +548,12 @@ var STATIONS = [
    pts:['歡迎與小物合影打卡','歡迎投票最喜歡小物','點點善共融小怪物聯名品項'],
    link:'inclusive',linkTx:'認識合作夥伴'},
   {id:'A7',bit:8,grp:'A',ic:'📰',c:'#F08A3C',name:'雜誌打卡區',full:'永續領航模擬雜誌封面打卡區',
-   loc:'前廳｜上方中段（近樓梯口）',
+   loc:'前廳｜近電梯處',
    desc:'把自己放上「健康勞動力永續領航」的封面。結合歷年影音、媒體報導、遠見 ESG 專區訪談文章與教授訪企文章。',
    pts:['現場拍完可直接下載電子封面','歷年成果影片與媒體報導集錦','遠見《企業職安衛治理與永續韌性》調查專文'],
    link:'media',linkTx:'看歷年影音與報導'},
   {id:'A8',bit:9,grp:'A',ic:'🖥️',c:'#6DB3DF',name:'互動展覽區',full:'互動展覽區',
-   loc:'前廳｜中央開放區（A7 下方）',
+   loc:'前廳｜報到側廊',
    desc:'線上互動數位展的實體體驗區。九類別切換器、八構面手風琴、落點動態診斷鏡、供應鏈漣漪圖、SAQ Builder 都能親手玩一次。',
    pts:['拖曳八支滑桿，即時看見自家落點與 PR 值','點選領航大廠，看供應鏈擴散漣漪','勾選題目一鍵生成專屬 SAQ 題組'],
    link:'expo',linkTx:'用手機也玩一次'},
@@ -746,12 +746,21 @@ function withGuest(s, u){
   q.push('src=passport');
   return u + (u.indexOf('?') < 0 ? '?' : '&') + q.join('&');
 }
+/* 一律另開視窗，護照本身不跳走（來賓看完關掉分頁就回到護照）。
+   注意：window.open 帶 'noopener' 參數時依規格一律回傳 null，不能用回傳值判斷成敗，
+   所以改成不帶參數開啟、成功後再切斷 opener。 */
 function openUrl(u){
   if(!u || u === '#') return;
-  var ok = false;
-  try{ var w = window.open(u, '_blank', 'noopener'); ok = !!w; }catch(e){}
-  if(!ok){ try{ window.parent.postMessage({type:'ohs-open-url', url:u}, '*'); }catch(e){} }
-  if(!ok){ setTimeout(function(){ try{ location.href = u; }catch(e){} }, 350); }
+  var w = null;
+  try{ w = window.open(u, '_blank'); }catch(e){}
+  if(w){ try{ w.opener = null; }catch(e){} return; }
+  /* 真的被瀏覽器擋下：改用暫時的另開連結再試一次，仍然不離開護照 */
+  try{
+    var a = document.createElement('a');
+    a.href = u; a.target = '_blank'; a.rel = 'noopener';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ try{ a.parentNode.removeChild(a); }catch(e){} }, 0);
+  }catch(e){}
 }
 var tmr;
 function toast(msg){
@@ -1368,6 +1377,8 @@ function showRegDesk(){
   el('sheet').innerHTML =
     '<div class="hd"><div class="ic">🎟️</div><div><h3>登記抽獎</h3></div><button class="x" id="sx">✕</button></div>'+
     '<div class="bd">'+
+      '<p style="margin-bottom:8px;padding:8px 11px;border-radius:9px;background:#FFF4E5;color:#8A5A1A;font-weight:700">'+
+      '本活動抽獎登記由工作人員辦理，<b>這個畫面不需要送出</b>。</p>'+
       '<p>請在<b>中場休息結束前</b>，到<b>服務台</b>出示這個畫面完成登記。<br>'+
       '集點統計到中場休息結束，<b>登記前請先把想集的章集完</b>——服務台登記的是你出示當下的點數。</p>'+
       '<div class="note" style="margin:12px 0;line-height:1.9">'+
