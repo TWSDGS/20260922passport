@@ -250,7 +250,12 @@ function render(d){
 
   el('dot').className = 'dot ok';
   el('upd').textContent = '更新於 ' + fmtTime(d.now);
-  el('err').hidden = true;
+  if(d.missing && d.missing.length){
+    el('err').hidden = false;
+    el('err').textContent = '⚠️ Wix 讀不到這些集合，相關數字暫時為 0：' + d.missing.join('、') + '。請到 CMS 確認集合 ID 是否完全一致。';
+  }else{
+    el('err').hidden = true;
+  }
 }
 
 var timer = null, busy = false;
