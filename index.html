@@ -251,6 +251,14 @@ input[type=text]:focus{outline:0;border-color:var(--blue)}
 input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-family:"SFMono-Regular",Consolas,monospace}
 .chk{display:flex;gap:9px;align-items:flex-start;margin-top:14px;font-size:12px;color:var(--mute);line-height:1.6}
 .chk input{width:19px;height:19px;flex:none;margin-top:1px;accent-color:var(--blue)}
+.priv{margin-top:9px;border:1px solid var(--line);border-radius:11px;background:var(--soft);font-size:12px;color:var(--ink)}
+.priv summary{cursor:pointer;padding:9px 12px;font-weight:800;color:var(--blue);list-style:none}
+.priv summary::-webkit-details-marker{display:none}
+.priv[open] summary{border-bottom:1px solid var(--line)}
+.privtx{padding:10px 13px 12px;line-height:1.7;max-height:320px;overflow:auto}
+.privtx h4{font-size:12.5px;font-weight:900;color:var(--navy);margin:8px 0 2px}
+.privtx h4:first-child{margin-top:0}
+.privtx ol{padding-left:18px}
 .err{color:var(--red);font-size:12.5px;font-weight:800;margin-top:9px;min-height:1.2em}
 
 /* ---------- 開通畫面 ---------- */
@@ -454,7 +462,7 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
     </div>
     主辦單位：勞動部職業安全衛生署　執行單位：財團法人安全衛生技術中心<br>
     活動聯絡：施品甄小姐（06）293-7770　<b>oshasdg.com</b><br>
-    <span style="font-size:11px">集點照片只存在你的手機，不會上傳；達抽獎門檻時會送出姓名、單位、報到編號與備份碼以加入抽獎名單，資料於活動結束 30 日後銷毀。
+    <span style="font-size:11px">集點照片只存在你的手機，不會上傳；達抽獎門檻時會送出姓名、單位、報到編號與備份碼以加入抽獎名單，資料於活動結束 30 日後銷毀。開通與集點情形另以匿名方式統計。
     <button id="btnReset" style="color:#B9C8D8;text-decoration:underline;font-size:11px">重設護照</button></span>
   </div>
 </main>
@@ -497,8 +505,9 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
 
       <div class="chk">
         <input type="checkbox" id="obAgree">
-        <label for="obAgree">我已閱讀並同意本活動的個人資料告知事項。上述資料僅用於抽獎名單（達門檻時自動送出）、現場核對與獎品寄送，於活動結束 30 日後銷毀。</label>
+        <label for="obAgree">我已閱讀並同意本活動的個人資料告知事項（見下方）。上述資料僅用於抽獎名單（達門檻時自動送出）、現場核對與獎品寄送，於活動結束 30 日後銷毀。</label>
       </div>
+      <details class="priv"><summary>📄 個人資料告知事項（點此展開）</summary><div class="privtx"></div></details>
       <div class="err" id="obErr"></div>
 
       <div class="btns"><button class="btn g" id="obGo">開通護照，開始集章 →</button></div>
@@ -509,6 +518,7 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
       <h2>♻️ 用備份碼登入</h2>
       <p class="lead">輸入先前保存的備份碼／抽獎碼（格式 <b>HW-XXX-YY</b>），即可在這台裝置還原所有已蓋的章。<br>
       只記得報到編號？向服務台報上編號，可查出你最新的備份碼。登入即表示同意本活動個人資料告知事項。</p>
+      <details class="priv"><summary>📄 個人資料告知事項（點此展開）</summary><div class="privtx"></div></details>
       <label class="fl">抽獎碼／備份碼<s>*</s></label>
       <input type="text" id="lgCode" class="code" maxlength="12" placeholder="HW-XXX-YY">
       <label class="fl">姓名或暱稱<u>選填，方便現場核對</u></label>
@@ -542,6 +552,7 @@ var CFG = {
   expo        : 'https://www.oshasdg.com/expo2026/5y',              // 線上互動數位展
   drawApi     : 'https://www.oshasdg.com/_functions/luckyDraw',      // 達門檻自動加入抽獎（Wix http-functions.js）
   resultApi   : 'https://www.oshasdg.com/_functions/drawResult',     // 查詢是否中獎（公布得獎名單後）
+  statsApi    : 'https://www.oshasdg.com/_functions/passportPing',   // 匿名使用統計（不含個資；改回 '' 即停用）
   feedback    : 'https://www.oshasdg.com/feedback',                 // ★ 會後回饋問卷
   inclusive   : 'https://www.oshasdg.com/inclusiveworkplace',
   awards      : 'https://www.oshasdg.com/114-awards',
@@ -698,7 +709,7 @@ function decodeTicket(code){
    5. 狀態
    ========================================================= */
 function blank(){ return {v:2, on:0, mask:0, t:{}, via:{}, ph:{}, name:'', org:'', no:'', out:0, rs:0, tail:'',
-  dev:'', sy:'', syAt:0, syKind:'', syErr:'', win:null}; }
+  dev:'', sy:'', syAt:0, syKind:'', syErr:'', win:null, sp:''}; }
 function load(){
   var st = blank();
   try{
@@ -722,6 +733,7 @@ function load(){
       st.syKind = o.syKind || '';
       st.syErr  = o.syErr  || '';
       st.win  = o.win  || null; /* 開獎結果 {pub, won:[{prize,drawNo}], at} */
+      st.sp   = o.sp   || '';   /* 匿名統計最後一次成功回報的狀態 */
     }
   }catch(e){}
   /* 儲存被擋時的最後防線：從網址錨點 #p=HW-XXX-YY 還原 */
@@ -757,6 +769,31 @@ function save(){
       history.replaceState(null, '', location.pathname + location.search + '#p=' + encodeTicket(ST.mask));
     }catch(e){}
   }
+  schedulePing();
+}
+
+/* 匿名使用統計：只送「隨機裝置碼、是否開通、集點遮罩」，不含姓名、公司、報到編號。
+   狀態沒變就不送；任何錯誤都吞掉，不影響護照本身。 */
+var pingTmr = null;
+function schedulePing(){
+  try{ clearTimeout(pingTmr); pingTmr = setTimeout(sendPing, 2500); }catch(e){}
+}
+function sendPing(){
+  try{
+    if(!CFG.statsApi || !window.fetch) return;
+    var sig = (ST.on ? 1 : 0) + ':' + (ST.mask | 0);
+    if(ST.sp === sig) return;
+    if(!ST.dev) ST.dev = 'D' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    var body = JSON.stringify({d: ST.dev, on: ST.on ? 1 : 0, m: ST.mask | 0, v: '2.2'});
+    fetch(CFG.statsApi, {method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'}, body: body, keepalive: true})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d && d.ok){
+          ST.sp = sig;
+          try{ Store.set(KEY, JSON.stringify(ST)); }catch(e){}   /* 直接寫入，不走 save() 以免再觸發回報 */
+        }
+      }, function(){});
+  }catch(e){}
 }
 function has(s){ return (ST.mask >> s.bit) & 1; }
 function count(grp){ var n=0; STATIONS.forEach(function(s){ if(s.grp===grp && has(s)) n++; }); return n; }
@@ -1384,6 +1421,31 @@ function loginByCode(){
     setTimeout(function(){ stamp(p); }, 900);
   }
 }
+/* 個人資料告知事項（個人資料保護法第 8 條）：開通與備份碼登入兩處共用同一份內容 */
+var PRIVACY_HTML =
+  '<h4>一、蒐集機關</h4>' +
+  '勞動部職業安全衛生署（主辦單位）委託財團法人安全衛生技術中心（執行單位）辦理本活動，由執行單位蒐集、處理及利用您的個人資料。' +
+  '<h4>二、蒐集目的</h4>' +
+  '2026.09.22 成果發表會之集點抽獎名單建立、現場身分核對、得獎通知與獎品發放寄送，以及去識別化之活動參與統計。' +
+  '<h4>三、個人資料類別</h4>' +
+  '姓名或暱稱、公司／單位、報到編號、集點紀錄（備份碼）、裝置識別碼（隨機產生，用於辨識同一報到編號是否被他人誤用）。' +
+  '<h4>四、哪些資料會送出、哪些不會</h4>' +
+  '<ol><li>集滿 3 點（或完成會前兩項線上任務）時，上述資料會自動傳送至主辦單位網站後台，加入抽獎名單；未達門檻不會送出。</li>' +
+  '<li>集點照片、蓋章時間只存在您自己手機的瀏覽器中，<b>不會上傳</b>。</li>' +
+  '<li>公布得獎名單時，只以報到編號比對是否中獎，不公開姓名與公司。大螢幕顯示的姓名會以「O」遮蔽部分字元。</li>' +
+  '<li>為了解活動參與情形，護照會<b>匿名</b>回傳「是否開通」與「已集哪幾站」，只附隨機產生的裝置碼，<b>不含姓名、公司與報到編號</b>，無法辨識個人。</li></ol>' +
+  '<h4>五、利用期間、地區、對象及方式</h4>' +
+  '期間：自蒐集日起至活動結束後 30 日，屆期刪除銷毀。地區：中華民國境內。對象：主辦單位及執行單位。方式：以電子方式處理，僅供上述目的使用，不作其他用途，亦不提供第三人。' +
+  '<h4>六、您的權利</h4>' +
+  '您可依個人資料保護法第 3 條，向執行單位請求查詢或閱覽、製給複製本、補充或更正、停止蒐集處理或利用，以及刪除您的個人資料。' +
+  '聯絡方式：財團法人安全衛生技術中心 活動聯絡窗口（06）293-7770。' +
+  '<h4>七、不提供資料的影響</h4>' +
+  '您可以自由選擇是否提供。不填報到編號仍可使用護照集點與瀏覽展區資訊，但無法自動加入抽獎名單；不同意本告知事項則無法開通護照，可改至 A9 報到台領取紙本集點護照參加。';
+Array.prototype.forEach.call(document.querySelectorAll('.privtx'), function(d){ d.innerHTML = PRIVACY_HTML; });
+Array.prototype.forEach.call(document.querySelectorAll('details.priv'), function(d){
+  d.addEventListener('toggle', function(){ setTimeout(reportHeight, 50); });
+});
+
 el('obGo').onclick      = activate;
 el('obToLogin').onclick = function(){ el('obNew').style.display='none'; el('obLogin').style.display=''; reportHeight(); };
 el('obToNew').onclick   = function(){ el('obLogin').style.display='none'; el('obNew').style.display=''; reportHeight(); };
@@ -1789,6 +1851,7 @@ window.addEventListener('message', function(e){
   /* 未開通 → 顯示開通畫面（若有待處理站點，開通後自動補蓋） */
   if(!ST.on) showOnboard();
   else { scheduleSync(); checkResult(); }
+  schedulePing();   /* 已開通的舊使用者：更新後第一次打開時補回報目前狀態 */
 
   /* 通知母頁：我已就緒，請把網址參數傳進來（Wix iframe 情境） */
   if(INFRAME){

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>護照參與統計｜9/22 成果發表會</title>
+<!--
+  護照參與統計頁
+  ‧ 資料來源：Wix /_functions/passportStats（需統計密碼，密碼只存在這台裝置的瀏覽器）
+  ‧ 開通、集點為匿名統計（裝置數，從護照 v2.2 上線後開始累積）；抽獎名單、倡議為 CMS 實際筆數
+  ‧ 放置：GitHub Pages 與 index.html 同一層（stats.html），或直接在電腦上雙擊開啟
+-->
+<style>
+:root{
+  --bg:#F3F6FA; --card:#FFFFFF; --ink:#16263A; --ink2:#4B6076; --mute:#7C8DA0; --line:#E1E8F0; --grid:#EDF1F6;
+  --accent:#004CB9; --accent2:#7FA6DE; --green:#2E9E48; --warn:#B26A00; --warnbg:#FFF4E0; --bad:#B03030; --badbg:#FDECEC;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1720; --card:#17212C; --ink:#E6EDF4; --ink2:#AEBBC9; --mute:#8594A5; --line:#26323F; --grid:#1F2A36;
+    --accent:#5B9BF0; --accent2:#2F5E9E; --green:#5CC97A; --warn:#F2B35C; --warnbg:#3A2A10; --bad:#F08080; --badbg:#3A1C1C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1720; --card:#17212C; --ink:#E6EDF4; --ink2:#AEBBC9; --mute:#8594A5; --line:#26323F; --grid:#1F2A36;
+  --accent:#5B9BF0; --accent2:#2F5E9E; --green:#5CC97A; --warn:#F2B35C; --warnbg:#3A2A10; --bad:#F08080; --badbg:#3A1C1C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;font-size:15px;line-height:1.55;padding:0 16px 40px}
+.wrap{max-width:1100px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;padding:22px 0 14px}
+header h1{font-size:22px;font-weight:900;letter-spacing:.02em}
+header .sub{font-size:13px;color:var(--mute)}
+.state{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mute)}
+.dot.ok{background:var(--green)} .dot.err{background:var(--bad)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:6px 12px;font-size:13px;font-weight:700}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile .lb{font-size:13px;font-weight:700;color:var(--ink2)}
+.tile .v{font-size:36px;font-weight:900;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.tile .v small{font-size:15px;font-weight:700;color:var(--mute);margin-left:4px}
+.tile .d{font-size:12.5px;color:var(--mute);margin-top:4px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:12px}
+h2{font-size:15px;font-weight:900;margin-bottom:10px;display:flex;align-items:baseline;gap:8px}
+h2 span{font-size:12px;font-weight:700;color:var(--mute)}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:118px minmax(0,1fr) 64px;align-items:center;gap:10px;font-size:13.5px}
+.bar .nm{color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .tr{height:18px;position:relative}
+.bar .fl{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:0 4px 4px 0;min-width:2px}
+.bar .fl.soft{background:var(--accent2)}
+.bar .n{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.bar .n s{text-decoration:none;font-weight:600;color:var(--mute);font-size:12px;margin-left:3px}
+.bar:hover .fl{filter:brightness(1.12)}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--card);font-size:12.5px;font-weight:700;border-radius:7px;padding:5px 9px;white-space:nowrap;transform:translate(-50%,-120%);display:none}
+.note{margin-top:12px;font-size:12.5px;color:var(--mute);line-height:1.7}
+.note b{color:var(--ink2)}
+.msg{margin-top:12px;padding:10px 14px;border-radius:10px;font-size:13.5px;font-weight:700}
+.msg.warn{background:var(--warnbg);color:var(--warn)} .msg.err{background:var(--badbg);color:var(--bad)}
+.login{max-width:420px;margin:60px auto}
+.login p{font-size:13.5px;color:var(--ink2);margin:6px 0 14px}
+.login input{width:100%;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px}
+.login button{margin-top:10px;width:100%;padding:10px;background:var(--accent);color:#fff;border-color:var(--accent);font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+td{padding:6px 4px;border-bottom:1px solid var(--line)} td:last-child{text-align:right;font-weight:800}
+@media (max-width:760px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .bar{grid-template-columns:96px minmax(0,1fr) 58px}
+  .tile .v{font-size:30px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>護照參與統計</h1>
+      <div class="sub">2026.09.22 成果發表會｜每 60 秒自動更新</div>
+    </div>
+    <div class="state" id="state" hidden>
+      <span class="dot" id="dot"></span><span id="upd">—</span>
+      <button id="refresh" type="button">立即更新</button>
+      <button id="logout" type="button">登出</button>
+    </div>
+  </header>
+
+  <section class="card login" id="login" hidden>
+    <h2>輸入統計密碼</h2>
+    <p>密碼只會存在這台裝置的瀏覽器，不會出現在網址或頁面上。</p>
+    <input id="tk" type="password" autocomplete="off" placeholder="統計密碼">
+    <button id="go" type="button">查看統計</button>
+    <div class="msg err" id="loginErr" hidden></div>
+  </section>
+
+  <main id="dash" hidden>
+    <div class="tiles">
+      <div class="card tile"><div class="lb">開通護照</div><div class="v" id="kAct">—</div><div class="d" id="kActD">—</div></div>
+      <div class="card tile"><div class="lb">已加入抽獎名單</div><div class="v" id="kDraw">—</div><div class="d" id="kDrawD">—</div></div>
+      <div class="card tile"><div class="lb">企業倡議</div><div class="v" id="kWall">—</div><div class="d" id="kWallD">—</div></div>
+      <div class="card tile"><div class="lb">平均集點（已開通）</div><div class="v" id="kAvg">—</div><div class="d" id="kAvgD">A1–A8 共 8 點</div></div>
+    </div>
+    <div class="msg err" id="err" hidden></div>
+
+    <div class="grid2">
+      <section class="card">
+        <h2>參與進度<span>裝置數（匿名）</span></h2>
+        <div class="bars" id="funnel"></div>
+      </section>
+      <section class="card">
+        <h2>各站集點人數<span>已開通裝置</span></h2>
+        <div class="bars" id="stations"></div>
+      </section>
+    </div>
+
+    <div class="grid2">
+      <section class="card">
+        <h2>累積開通人數<span>依時間</span></h2>
+        <div class="chart" id="line"><div class="tip" id="tip"></div></div>
+      </section>
+      <section class="card">
+        <h2>抽獎名單組成<span>CMS 實際筆數，已排除測試資料</span></h2>
+        <table id="drawTbl"></table>
+      </section>
+    </div>
+
+    <p class="note">
+      <b>怎麼讀這些數字</b><br>
+      ‧「開通護照、參與進度、各站集點、累積開通」是<b>匿名裝置數</b>：從護照 v2.2 上線後開始累積；更新前已開通的人，下次打開護照時才會被算進來。同一人換手機會算成兩台。<br>
+      ‧「已加入抽獎名單」「企業倡議」是 Wix CMS 的實際筆數，包含更新前就加入的人。<br>
+      ‧ 抽獎名單 = 集滿 3 點，或完成會前兩項任務（開通＋倡議）且有填報到編號的人。
+    </p>
+  </main>
+</div>
+
+<script>
+var API = 'https://www.oshasdg.com/_functions/passportStats';
+var KEY = 'ohs_stats_token';
+var NAMES = ['P1 啟程章（開通）','P2 會前倡議章','A1 倡議共創牆','A2 主視覺合影','A3 共融視覺牆','A4 推動歷程區',
+             'A5 圓桌交流區','A6 文青小物區','A7 雜誌打卡區','A8 互動展覽區','A9 報到／簽退','Z1 會後問卷'];
+function el(id){ return document.getElementById(id); }
+function getTok(){ try{ return localStorage.getItem(KEY) || ''; }catch(e){ return ''; } }
+function setTok(v){ try{ if(v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); }catch(e){} }
+var memTok = '';
+function tok(){ return getTok() || memTok; }
+function fmtTime(ms){ if(!ms) return '—'; var d = new Date(ms); return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+function pct(a, b){ return b ? Math.round(a / b * 100) + '%' : '—'; }
+
+function showLogin(msg){
+  el('login').hidden = false; el('dash').hidden = true; el('state').hidden = true;
+  el('loginErr').hidden = !msg; el('loginErr').textContent = msg || '';
+}
+function bars(host, rows, max){
+  host.innerHTML = rows.map(function(r){
+    var w = max ? Math.max(0, r.v / max * 100) : 0;
+    return '<div class="bar" title="'+r.name+'：'+r.v+(r.sub ? '（'+r.sub+'）' : '')+'">'+
+      '<span class="nm">'+r.name+'</span>'+
+      '<span class="tr"><span class="fl'+(r.soft ? ' soft' : '')+'" style="width:'+w+'%"></span></span>'+
+      '<span class="n">'+r.v+(r.sub ? '<s>'+r.sub+'</s>' : '')+'</span></div>';
+  }).join('');
+}
+
+function lineChart(times, now){
+  var host = el('line'), tip = el('tip');
+  host.querySelectorAll('svg').forEach(function(s){ s.remove(); });
+  var W = 520, H = 220, L = 38, R = 12, T = 12, B = 30;
+  if(!times.length){
+    host.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 '+W+' 80"><text x="'+(W/2)+'" y="44" text-anchor="middle" fill="var(--mute)" font-size="14">尚無開通紀錄</text></svg>');
+    return;
+  }
+  var t0 = times[0], t1 = Math.max(now, times[times.length-1] + 60000);
+  var n = times.length, yMax = Math.max(4, Math.ceil(n * 1.15));
+  var step = yMax <= 10 ? 2 : yMax <= 50 ? 10 : yMax <= 200 ? 50 : 100;
+  yMax = Math.ceil(yMax / step) * step;
+  var x = function(t){ return L + (t - t0) / (t1 - t0) * (W - L - R); };
+  var y = function(v){ return T + (1 - v / yMax) * (H - T - B); };
+  var d = 'M' + x(t0) + ',' + y(0);
+  times.forEach(function(t, i){ d += ' L' + x(t) + ',' + y(i) + ' L' + x(t) + ',' + y(i+1); });
+  d += ' L' + x(t1) + ',' + y(n);
+  var grid = '', yl = '';
+  for(var v = 0; v <= yMax; v += step){
+    grid += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--grid)" stroke-width="1"/>';
+    yl += '<text x="'+(L-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" fill="var(--mute)">'+v+'</text>';
+  }
+  var xl = '', ticks = 4;
+  for(var i = 0; i <= ticks; i++){
+    var tt = t0 + (t1 - t0) * i / ticks;
+    xl += '<text x="'+x(tt)+'" y="'+(H-8)+'" text-anchor="'+(i===0?'start':i===ticks?'end':'middle')+'" font-size="11" fill="var(--mute)">'+fmtTime(tt)+'</text>';
+  }
+  var svg = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="累積開通人數，目前 '+n+' 台裝置">'+grid+yl+xl+
+    '<path d="'+d+' L'+x(t1)+','+y(0)+' Z" fill="var(--accent)" opacity=".10"/>'+
+    '<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>'+
+    '<circle cx="'+x(t1)+'" cy="'+y(n)+'" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>'+
+    '<line id="cross" x1="0" x2="0" y1="'+T+'" y2="'+(H-B)+'" stroke="var(--mute)" stroke-dasharray="3 3" visibility="hidden"/>'+
+    '<rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'" fill="transparent" id="hit"/></svg>';
+  host.insertAdjacentHTML('afterbegin', svg);
+  var s = host.querySelector('svg'), hit = s.querySelector('#hit'), cross = s.querySelector('#cross');
+  hit.addEventListener('mousemove', function(ev){
+    var r = s.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+    var t = t0 + (px - L) / (W - L - R) * (t1 - t0), c = 0;
+    while(c < n && times[c] <= t) c++;
+    cross.setAttribute('x1', px); cross.setAttribute('x2', px); cross.setAttribute('visibility', 'visible');
+    tip.style.display = 'block';
+    tip.style.left = (px / W * r.width) + 'px'; tip.style.top = (y(c) / H * r.height) + 'px';
+    tip.textContent = fmtTime(t) + '　累積 ' + c + ' 台';
+  });
+  hit.addEventListener('mouseleave', function(){ tip.style.display = 'none'; cross.setAttribute('visibility', 'hidden'); });
+}
+
+function render(d){
+  var p = d.passport, dr = d.draw, w = d.wall, act = p.activated;
+  var ge1 = p.tiers.p1 + p.tiers.p3 + p.tiers.p6 + p.tiers.p8, ge3 = p.tiers.p3 + p.tiers.p6 + p.tiers.p8, ge6 = p.tiers.p6 + p.tiers.p8;
+  var sumPts = 0;
+  for(var b = 2; b <= 9; b++) sumPts += p.stations[b];
+  el('kAct').innerHTML = act + '<small>台</small>';
+  el('kActD').textContent = '開啟過護照 ' + p.devices + ' 台（開通率 ' + pct(act, p.devices) + '）';
+  el('kDraw').innerHTML = dr.entries + '<small>人</small>';
+  el('kDrawD').textContent = '含早鳥 ' + dr.early + ' 人｜最後更新 ' + fmtTime(dr.lastAt);
+  el('kWall').innerHTML = w.orgs + '<small>家</small>';
+  el('kWallD').textContent = '共 ' + w.entries + ' 筆｜最後更新 ' + fmtTime(w.lastAt);
+  el('kAvg').innerHTML = act ? (sumPts / act).toFixed(1) + '<small>點</small>' : '—';
+
+  bars(el('funnel'), [
+    {name:'開啟護照頁', v:p.devices, soft:1},
+    {name:'開通護照', v:act, sub:pct(act, p.devices)},
+    {name:'集 1 點以上', v:ge1, sub:pct(ge1, act)},
+    {name:'集滿 3 點', v:ge3, sub:pct(ge3, act)},
+    {name:'集滿 6 點', v:ge6, sub:pct(ge6, act)},
+    {name:'8 點全滿', v:p.tiers.p8, sub:pct(p.tiers.p8, act)}
+  ], p.devices);
+
+  var st = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function(bit){ return {name:NAMES[bit], v:p.stations[bit], soft: bit === 1}; });
+  bars(el('stations'), st, Math.max(1, act));
+
+  lineChart(p.activatedAt, d.now);
+
+  el('drawTbl').innerHTML =
+    '<tr><td>抽獎名單總人數</td><td>'+dr.entries+'</td></tr>'+
+    '<tr><td>早鳥輪（開通＋會前倡議）</td><td>'+dr.early+'</td></tr>'+
+    '<tr><td>抽 1 次（3–5 點）</td><td>'+dr.t1+'</td></tr>'+
+    '<tr><td>抽 2 次（6–7 點）</td><td>'+dr.t2+'</td></tr>'+
+    '<tr><td>抽 3 次（8 點全滿）</td><td>'+dr.t3+'</td></tr>'+
+    '<tr><td style="color:var(--mute)">已排除的測試資料</td><td style="color:var(--mute)">'+dr.excludedTest+'</td></tr>'+
+    '<tr><td style="color:var(--mute)">已公布得獎名單</td><td style="color:var(--mute)">'+(d.winners.published ? d.winners.published + ' 位' : '尚未公布')+'</td></tr>';
+
+  el('dot').className = 'dot ok';
+  el('upd').textContent = '更新於 ' + fmtTime(d.now);
+  el('err').hidden = true;
+}
+
+var timer = null, busy = false;
+function load(){
+  if(busy || !tok()) return;
+  busy = true;
+  fetch(API + '?token=' + encodeURIComponent(tok()) + '&t=' + Date.now())
+    .then(function(r){ return r.json().then(function(d){ return {s:r.status, d:d}; }); })
+    .then(function(x){
+      busy = false;
+      if(x.s === 403){ setTok(''); memTok = ''; clearInterval(timer); showLogin('密碼不正確，請重新輸入。'); return; }
+      if(!x.d || !x.d.ok){ throw new Error((x.d && x.d.error) || x.s); }
+      el('login').hidden = true; el('dash').hidden = false; el('state').hidden = false;
+      render(x.d);
+    })
+    .catch(function(e){
+      busy = false;
+      el('dot').className = 'dot err';
+      el('err').hidden = false;
+      el('err').textContent = '暫時讀不到資料（' + (e && e.message || '網路錯誤') + '），會在下一次自動更新時重試。';
+      if(el('dash').hidden){ showLogin('讀不到資料：' + (e && e.message || '網路錯誤')); }
+    });
+}
+function start(){
+  clearInterval(timer);
+  load();
+  timer = setInterval(function(){ if(document.visibilityState !== 'hidden') load(); }, 60000);
+}
+el('go').onclick = function(){
+  var v = el('tk').value.trim();
+  if(!v) return;
+  memTok = v; setTok(v); start();
+};
+el('tk').onkeydown = function(e){ if(e.key === 'Enter') el('go').click(); };
+el('refresh').onclick = load;
+el('logout').onclick = function(){ setTok(''); memTok = ''; clearInterval(timer); el('tk').value = ''; showLogin(''); };
+document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible' && tok()) load(); });
+if(tok()) start(); else showLogin('');
+</script>
+</body>
+</html>
