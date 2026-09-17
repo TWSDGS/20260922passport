@@ -423,7 +423,7 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
   <!-- 簽退提醒 -->
   <div class="signout" id="signout">
     <b id="soT">🕓 若有登記時數，別忘了簽退</b>
-    <p id="soP">依簡章規定，須完整完成簽到及簽退才能登錄在職教育訓練時數。離場前請到 A9 報到／簽退區完成簽退。</p>
+    <p id="soP">依簡章規定，須完整完成簽到及簽退才能登錄在職教育訓練時數。離場前請掃描<b>線上簽退 QR Code</b> 完成簽退。</p>
   </div>
 
   <!-- ① 會前線上任務 -->
@@ -436,7 +436,7 @@ input.code{font-weight:900;letter-spacing:2px;text-transform:uppercase;font-fami
   <!-- ② 現場展區 -->
   <section class="sec">
     <div class="sh" style="--c:var(--blue)"><h2>② 現場展區</h2><span class="pill">8 站集點</span><span class="cnt" id="cntA">0 / 9</span></div>
-    <div class="shs">到站點後<b>點該站的格子 → 按「📷 拍照集點」</b>，拍一張現場照片或從相簿選取即完成蓋章。</div>
+    <div class="shs">到站點後<b>點該站的格子 → 按「📷 拍照集點」</b>，拍一張現場照片或從相簿選取即完成蓋章。<b>A1 倡議共創牆</b>則是寫下倡議即集點。</div>
 
     <div class="planbox">
       <div class="ttl">📍 展區位置示意圖 </div>
@@ -584,7 +584,7 @@ var STATIONS = [
   /* --- 現場展區 bit 2-10 --- */
   {id:'A1',bit:2,grp:'A',ic:'🧱',c:'#004CB9',name:'倡議共創牆',full:'14:15 倡議時段',
    loc:'國際會議廳｜舞台大螢幕',
-   desc:'在本站拍照即完成集章，也可以按下方按鈕留下或更新倡議。你的企業會即時亮相在大螢幕的台灣版圖上；14:15–14:30 承諾儀式是全場一起上牆的時刻。會前已完成線上倡議者，本章自動蓋上。',
+   desc:'按下方按鈕寫下倡議，送出後回護照即完成本站集點（本站不用拍照）。你的企業會即時亮相在大螢幕的台灣版圖上；14:15–14:30 承諾儀式是全場一起上牆的時刻。會前已完成線上倡議者，本章自動蓋上。',
    pts:['邀請 30 家領航企業與所有來賓共創未來','已填寫過的企業會更新倡議詞','會後共創牆持續開放，可持續填寫並下載自家倡議卡'],
    wall:1, link:'wall',linkTx:'寫下／更新倡議'},
   {id:'A2',bit:3,grp:'A',ic:'📷',c:'#1B72BC',name:'主視覺合影',full:'主視覺合影區',
@@ -599,8 +599,8 @@ var STATIONS = [
    link:'inclusive',linkTx:'進入共融職場專區'},
   {id:'A4',bit:5,grp:'A',ic:'🏛️',c:'#42B852',name:'推動歷程區',full:'推動歷程區',
    loc:'前廳｜落地窗前',
-   desc:'2021–2026 五年大事紀與歷年產出，串接五支主題展架：GRI 403 指南 → 自我評量平台 → 資源盤點與供應鏈應用 → 永續報告書主動評比與遠見合作調查 → 回饋報告與 SAQ Builder。現場備有各家獲獎企業介紹單張。',
-   pts:['三屆「健康勞動力永續領航企業」選拔累計 30 家','全國最大 OHS 自評資料庫，累計 3,775 家次','八大管理構面對接國際準則 GRI 403','供應鏈以大帶小：523 → 1,225 → 2,071 家','永續報告書主動評比 2025 年涵蓋 1,938 家'],
+   desc:'2021–2026 五年大事紀與歷年產出，串接五支主題展架：GRI 403 指南 → 自我評量平台 → 資源盤點與供應鏈應用 → 永續報告書主動評比與遠見合作調查 → 回饋報告。現場備有各家獲獎企業介紹單張。',
+   pts:['三屆「健康勞動力永續領航企業」選拔累計 30 家','全國最大 OHS 自評資料庫，統計至 114 年底累計 3,850 家次','八大管理構面對接國際準則 GRI 403','供應鏈以大帶小：響應家數由首年 523 家成長至 2,526 家','永續報告書主動評比 111–115 年累計 6,420 家次'],
    link:'awards',linkTx:'看選拔專區與歷年成果'},
   {id:'A5',bit:6,grp:'A',ic:'💬',c:'#7E5AA8',name:'圓桌交流區',full:'圓桌交流區',
    loc:'前廳｜階梯前側廣場',
@@ -619,19 +619,19 @@ var STATIONS = [
    link:'media',linkTx:'看歷年影音與報導'},
   {id:'A8',bit:9,grp:'A',ic:'🖥️',c:'#6DB3DF',name:'互動展覽區',full:'互動展覽區',
    loc:'前廳｜報到側廊',
-   desc:'線上互動數位展的實體體驗區。九類別切換器、八構面手風琴、落點動態診斷鏡、供應鏈漣漪圖、SAQ Builder 都能親手玩一次。',
-   pts:['拖曳八支滑桿，即時看見自家落點與 PR 值','點選領航大廠，看供應鏈擴散漣漪','勾選題目一鍵生成專屬 SAQ 題組'],
-   link:'expo',linkTx:'用手機也玩一次'},
+   desc:'健康勞動力數位資源的實體展示區：數位指南與數位健康勞動力準則，一次看懂企業推動的重點步驟與國際準則對應。',
+   pts:['數位指南：企業推動職場健康與安全的步驟與工具','數位健康勞動力準則：八大管理構面對接國際準則 GRI 403','回公司後也能用手機開啟，分享給同事'],
+   link:'expo',linkTx:'看數位指南與準則'},
   {id:'A9',bit:10,grp:'A',ic:'🪪',c:'#0B3B7A',name:'報到／簽退',full:'報到／簽退區（不計點）',
    loc:'前廳與會議廳之間｜入口走道',
-   desc:'本站不列入集點。報到時可請工作人員協助開通護照；需要登錄學習時數者，離場前請務必回到這裡簽退——時數以完整簽到退紀錄為準。',
+   desc:'本站不列入集點。報到時可請工作人員協助開通護照；需要登錄學習時數者，離場前請掃描線上簽退 QR Code 完成簽退——時數以完整簽到退紀錄為準。',
    pts:['13:00–13:30 報到；請攜帶報到編號','未簽到退、遲到或早退 15 分鐘以上者不予登錄學習時數','請自行截取簽到退完成畫面或拍照留存','無手機者，可於此處領取紙本護照','使用紙本護照者：請於中場休息結束前繳回 A9 報到台，由工作人員登錄後參加抽獎'],
    link:'signup',linkTx:'查看報到與時數說明'},
 
   /* --- 會後 bit 11 --- */
   {id:'Z1',bit:11,grp:'Z',ic:'🔄',c:'#C8992E',name:'續航章',full:'會後回饋問卷',loc:'線上｜會後感謝信',
    desc:'8 題、90 秒。填完解鎖電子成果包，並自動進入續航獎抽獎池。',
-   pts:['電子成果包：成果影片、五年歷程電子書、展架 PDF、遠見調查報告','續航獎 10/06、10/20 各抽 5 名','回饋將直接影響明年的展區與議程設計'],
+   pts:['電子成果包：成果影片、五年歷程電子書、活動簡報資料、遠見調查報告','續航獎 10/06、10/20 各抽 5 名','回饋將直接影響明年的展區與議程設計'],
    link:'feedback',linkTx:'填寫回饋問卷'}
 ];
 
@@ -1014,11 +1014,11 @@ function render(newId){
     el('soT').textContent = '✅ 已完成簽退';
     el('soP').innerHTML = '簽退時間 <b>' + new Date(ST.out).toLocaleString('zh-TW') +
       '</b>。請截圖保存此畫面，作為時數登錄的佐證。';
-  }else if(has(IDX.A9) && nowHour() >= SIGNOUT_FROM){
+  }else if(ST.on && nowHour() >= SIGNOUT_FROM){
     so.className = 'signout on';
     el('soT').textContent = '🕓 別忘了簽退';
     el('soP').innerHTML = '依簡章規定，須完整完成簽到及簽退才能登錄在職教育訓練時數。' +
-      '離場前請到 <b>A9 報到／簽退區</b>完成簽退，並自行截圖保存。';
+      '離場前請掃描<b>線上簽退 QR Code</b> 完成簽退，並自行截圖保存。';
   }else{
     so.className = 'signout';
   }
@@ -1185,8 +1185,13 @@ function openSheet(id){
   var s = IDX[id]; if(!s) return;
   var on = has(s);
   var url = CFG[s.link] || CFG.site;
-  /* 拍照集點的站：A1–A8（v2.1 起現場不放站點 QR）。A9 報到／簽退不計點 */
-  var isA = (s.grp === 'A') && s.id !== 'A9';
+  /* 拍照集點的站：A2–A8（v2.1 起現場不放站點 QR）。
+     A1 倡議共創牆只能靠「寫下倡議」集點（送出後回護照蓋 P2，並同步蓋 A1）；A9 報到／簽退不計點 */
+  var isA = (s.grp === 'A') && s.id !== 'A9' && !s.wall;
+  /* 倡議相關按鈕：已倡議過（P2 或 A1 已蓋）就改成「更新倡議內容」 */
+  var linkTx = s.link === 'wall'
+    ? ((has(IDX.P2) || has(IDX.A1)) ? '更新倡議內容' : '寫下我們的倡議')
+    : s.linkTx;
 
   /* 已蓋章：顯示認定方式與時間；合照認定的順帶顯示縮圖 */
   var statTx;
@@ -1197,7 +1202,9 @@ function openSheet(id){
   }else{
     statTx = isA
       ? '尚未蓋章 ‧ 到本站後按下方「📷 拍照集點」即完成'
-      : (s.id === 'A9' ? '本站不計點' : '尚未完成');
+      : (s.wall
+        ? '尚未蓋章 ‧ 按下方按鈕寫下倡議，送出後按「回護照領取倡議章」即完成集點'
+        : (s.id === 'A9' ? '本站不計點' : '尚未完成'));
   }
 
   el('sheet').innerHTML =
@@ -1218,7 +1225,7 @@ function openSheet(id){
         ? '<button class="btn g" id="sphoto">📷 拍照集點（拍照或選相簿照片）</button>'+
           '<input type="file" id="sfile" accept="image/*" hidden>'
         : '')+
-      '<button class="btn '+(!on && isA ? 'o' : 'p')+'" id="sgo">'+s.linkTx+' →</button>'+
+      '<button class="btn '+(!on && isA ? 'o' : 'p')+'" id="sgo">'+linkTx+' →</button>'+
       (!on && !isA && window.STAFF
         ? '<button class="btn o" id="sstamp">（工作人員）直接蓋章</button>'
         : '')+
