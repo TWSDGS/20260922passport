@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- =============================================================
+     線上簽退轉址頁｜https://twsdgs.github.io/20260922passport/out.html
+     現場 QR Code 固定指向本頁 → 自動帶入護照上的報到編號／姓名／單位 → 轉到 Google 表單
+     ‧ 帶入來源：網址參數 ?no=&name=&org=（護照按鈕）＞ 本機護照資料（同網域 localStorage）
+     ‧ 表單網址換了只要改下面的 FORM，QR Code 不用重印
+     ============================================================= -->
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>線上簽退</title>
+<style>
+  :root{--navy:#0B3B7A;--ink:#1D2B3A;--mute:#5B6B7C;--bg:#F4F7FB}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+       display:flex;min-height:100vh;align-items:center;justify-content:center;padding:0 16px}
+  .box{max-width:420px;width:100%;background:#fff;border-radius:16px;padding:28px 22px;text-align:center;
+       box-shadow:0 6px 24px rgba(11,59,122,.10)}
+  h1{font-size:20px;color:var(--navy);margin:0 0 8px}
+  p{margin:6px 0;color:var(--mute);font-size:14.5px}
+  a.btn{display:inline-block;margin-top:14px;background:var(--navy);color:#fff;text-decoration:none;
+        padding:12px 26px;border-radius:26px;font-weight:700}
+  .spin{width:34px;height:34px;border:4px solid #D6E2F0;border-top-color:var(--navy);border-radius:50%;
+        margin:4px auto 14px;animation:r 1s linear infinite}
+  @keyframes r{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+<div class="box" id="box">
+  <div class="spin"></div>
+  <h1>前往線上簽退…</h1>
+  <p>正在開啟簽退表單，並帶入您護照上的資料。</p>
+  <a class="btn" id="go" href="#">若沒有自動開啟，請點這裡</a>
+</div>
+<script>
+/* ★ 貼上 Apps Script 執行記錄中的「② 預填網址」（含 __NO__、__NAME__、__ORG__） */
+var FORM = '';
+
+var KEY = 'ohs_passport_2026';
+function fromPassport(){
+  try{ var o = JSON.parse(localStorage.getItem(KEY) || '{}'); return {no:o.no||'', name:o.name||'', org:o.org||''}; }
+  catch(e){ return {no:'', name:'', org:''}; }
+}
+function build(){
+  var q = new URLSearchParams(location.search), p = fromPassport();
+  var v = {
+    __NO__  : (q.get('no')   || p.no   || '').trim().toUpperCase(),
+    __NAME__: (q.get('name') || p.name || '').trim(),
+    __ORG__ : (q.get('org')  || p.org  || '').trim()
+  };
+  var u = new URL(FORM);
+  Array.from(u.searchParams.keys()).forEach(function(k){
+    var val = u.searchParams.get(k);
+    if(val in v){ if(v[val]) u.searchParams.set(k, v[val]); else u.searchParams.delete(k); }
+  });
+  return u.toString();
+}
+if(!FORM){
+  document.getElementById('box').innerHTML =
+    '<h1>線上簽退尚未開放</h1><p>請於活動結束前再掃描一次，或洽 A9 報到／簽退區工作人員。</p>';
+}else{
+  var url;
+  try{ url = build(); }catch(e){ url = FORM.split('?')[0]; }
+  document.getElementById('go').href = url;
+  location.replace(url);
+}
+</script>
+</body>
+</html>

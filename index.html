@@ -120,6 +120,8 @@ img{max-width:100%}
 .signout.done{background:#E8F8EC;border-color:#9BD6AC}
 .signout.done b{color:#217A38}
 .signout.done p{color:#2E7A45}
+.signout .soBtn{display:inline-block;margin-top:9px;background:#8A6414;color:#fff;text-decoration:none;
+  font-size:13.5px;font-weight:800;padding:8px 18px;border-radius:20px}
 
 /* ---------- 通用區塊 ---------- */
 .sec{margin-top:24px}
@@ -548,6 +550,7 @@ var CFG = {
   hub         : 'https://www.oshasdg.com/expo2026',                 // 展區導覽頁
   map         : 'https://www.oshasdg.com/expo2026#map',             // 展區地圖錨點
   signup      : 'https://www.oshasdg.com/event-details/zhi-chang-yong-xu-jian-kang-yu-an-quan-fa-zhan-cheng-guo-fa-biao-hui-1',
+  signout     : 'https://twsdgs.github.io/20260922passport/out.html',  // 線上簽退（轉到 Google 表單，自動帶入編號／姓名／單位）
   wall        : 'https://twsdgs.github.io/20260922passport/wall.html', // 倡議填寫頁（GitHub 獨立頁，自己讀網址參數帶入；iPhone 上 Wix /wall 讀不到參數）
   expo        : 'https://www.oshasdg.com/expo2026/5y',              // 線上互動數位展
   drawApi     : 'https://www.oshasdg.com/_functions/luckyDraw',      // 達門檻自動加入抽獎（Wix http-functions.js）
@@ -1018,7 +1021,10 @@ function render(newId){
     so.className = 'signout on';
     el('soT').textContent = '🕓 別忘了簽退';
     el('soP').innerHTML = '依簡章規定，須完整完成簽到及簽退才能登錄在職教育訓練時數。' +
-      '離場前請掃描<b>線上簽退 QR Code</b> 完成簽退，並自行截圖保存。';
+      '離場前請掃描<b>線上簽退 QR Code</b>，或直接點下方按鈕完成簽退，並自行截圖保存。' +
+      '<br><a class="soBtn" target="_blank" rel="noopener" href="' + CFG.signout +
+      '?no=' + encodeURIComponent(ST.no || '') + '&name=' + encodeURIComponent(ST.name || '') +
+      '&org=' + encodeURIComponent(ST.org || '') + '">📝 前往線上簽退</a>';
   }else{
     so.className = 'signout';
   }
