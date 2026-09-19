@@ -627,9 +627,9 @@ var STATIONS = [
    link:'expo',linkTx:'看數位指南與準則'},
   {id:'A9',bit:10,grp:'A',ic:'🪪',c:'#0B3B7A',name:'報到／簽退',full:'報到／簽退區（不計點）',
    loc:'前廳與會議廳之間｜入口走道',
-   desc:'本站不列入集點。報到時可請工作人員協助開通護照；需要登錄學習時數者，離場前請掃描線上簽退 QR Code 完成簽退——時數以完整簽到退紀錄為準。',
+   desc:'本站不列入集點。報到時可請工作人員協助開通護照；需要登錄學習時數者，離場前請按下方「前往線上簽退」或掃描線上簽退 QR Code 完成簽退——時數以完整簽到退紀錄為準。',
    pts:['13:00–13:30 報到；請攜帶報到編號','未簽到退、遲到或早退 15 分鐘以上者不予登錄學習時數','請自行截取簽到退完成畫面或拍照留存','無手機者，可於此處領取紙本護照','使用紙本護照者：請於中場休息結束前繳回 A9 報到台，由工作人員登錄後參加抽獎'],
-   link:'signup',linkTx:'查看報到與時數說明'},
+   link:'signout',linkTx:'📝 前往線上簽退'},
 
   /* --- 會後 bit 11 --- */
   {id:'Z1',bit:11,grp:'Z',ic:'🔄',c:'#C8992E',name:'續航章',full:'會後回饋問卷',loc:'線上｜會後感謝信',
@@ -839,6 +839,12 @@ function esc(s){
 /* 連到倡議共創牆時，把開通護照時填的企業與姓名帶過去，來賓少打兩個欄位。
    其他站台的連結不受影響；沒填企業時也不會加參數。 */
 function withGuest(s, u){
+  if(u && s.link === 'signout'){      /* 線上簽退：帶姓名與單位（簽退頁在同網域時也會自己讀護照資料） */
+    var qs = [];
+    if(ST.name) qs.push('name=' + encodeURIComponent(ST.name));
+    if(ST.org)  qs.push('org='  + encodeURIComponent(ST.org));
+    return qs.length ? u + (u.indexOf('?') < 0 ? '?' : '&') + qs.join('&') : u;
+  }
   if(!u || u === '#' || s.link !== 'wall') return u;
   var q = [];
   if(ST.org)  q.push('org=' + encodeURIComponent(ST.org));
@@ -1017,7 +1023,7 @@ function render(newId){
     el('soT').textContent = '✅ 已完成簽退';
     el('soP').innerHTML = '簽退時間 <b>' + new Date(ST.out).toLocaleString('zh-TW') +
       '</b>。請截圖保存此畫面，作為時數登錄的佐證。';
-  }else if(ST.on && nowHour() >= SIGNOUT_FROM){
+  }else if(ST.on && (nowHour() >= SIGNOUT_FROM || /[?&]so=1/.test(location.search))){   /* ?so=1：測試用，提前顯示簽退提醒 */
     so.className = 'signout on';
     el('soT').textContent = '🕓 別忘了簽退';
     el('soP').innerHTML = '依簡章規定，須完整完成簽到及簽退才能登錄在職教育訓練時數。' +
